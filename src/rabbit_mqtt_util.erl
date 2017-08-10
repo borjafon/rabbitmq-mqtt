@@ -30,13 +30,14 @@ subcription_queue_name(ClientId) ->
 %% .    /    topic level separator
 mqtt2amqp(Topic) ->
     erlang:iolist_to_binary(
-      re:replace(re:replace(Topic, "/", ".", [global]),
-                 "[\+]", "*", [global])).
+	re:replace(re:replace(re:replace(Topic, "[\.]","DOT", [global]), "/", ".", [global]),
+	"[\+]", "*", [global])).
 
 amqp2mqtt(Topic) ->
     erlang:iolist_to_binary(
-      re:replace(re:replace(Topic, "[\*]", "+", [global]),
-                 "[\.]", "/", [global])).
+        re:replace(re:replace(re:replace(Topic, "[\*]", "+", [global]),
+                 "[\.]", "/", [global]), "DOT", ".", [global])).
+
 
 gen_client_id() ->
     lists:nthtail(1, rabbit_guid:string(rabbit_guid:gen_secure(), [])).
